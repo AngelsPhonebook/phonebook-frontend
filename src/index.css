@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+h1 {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 36px;
+}
+
+h2 {
+  font-weight: 600;
+}
