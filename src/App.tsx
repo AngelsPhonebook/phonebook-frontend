@@ -47,7 +47,7 @@ function App() {
             </button>
           </div>
         ) : (
-          <ContactInfo {...currentUser} />
+          <ContactInfo contact={currentUser} />
         )}
       </div>
     </div>

@@ -2,8 +2,9 @@ import { useDispatch, useSelector } from "react-redux";
 import type { ContactProps } from "../type/typeUser";
 import ChangeInfoUser from "./ChangeInfoUser";
 import { handleOpenModal } from "../features/modalSlice";
+import { useEffect } from "react";
 
-export default function ContactInfo(contact: ContactProps) {
+export default function ContactInfo({ contact }: { contact: ContactProps }) {
   const firstLetterName = contact.firstName
     ? contact.firstName.charAt(0).toUpperCase()
     : "";
@@ -13,6 +14,8 @@ export default function ContactInfo(contact: ContactProps) {
 
   const isOpen = useSelector((state) => state.modalWindow.isOpen);
   const dispatch = useDispatch();
+
+  useEffect(() => {});
 
   return (
     <div className=" w-full h-full max-h-180 px-15 grid grid-cols-1 gap-2.5 justify-around">
