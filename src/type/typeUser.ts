@@ -1,7 +1,7 @@
 export type ContactProps = {
   id: number;
-  name: string;
-  surname: string;
+  firstName: string;
+  surName: string;
   phone: string;
   email: string;
   notes: string;

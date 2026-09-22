@@ -1,12 +1,18 @@
+import { useDispatch, useSelector } from "react-redux";
 import type { ContactProps } from "../type/typeUser";
+import ChangeInfoUser from "./ChangeInfoUser";
+import { handleOpenModal } from "../features/modalSlice";
 
 export default function ContactInfo(contact: ContactProps) {
-  const firstLetterName = contact.name
-    ? contact.name.charAt(0).toUpperCase()
+  const firstLetterName = contact.firstName
+    ? contact.firstName.charAt(0).toUpperCase()
     : "";
-  const firstLetterSurname = contact.surname
-    ? contact.surname.charAt(0).toUpperCase()
+  const firstLetterSurname = contact.surName
+    ? contact.surName.charAt(0).toUpperCase()
     : "";
+
+  const isOpen = useSelector((state) => state.modalWindow.isOpen);
+  const dispatch = useDispatch();
 
   return (
     <div className=" w-full h-full max-h-180 px-15 grid grid-cols-1 gap-2.5 justify-around">
@@ -19,14 +25,17 @@ export default function ContactInfo(contact: ContactProps) {
             </h1>
           </div>
           <h1>
-            {contact.name} {contact.surname}
+            {contact.firstName} {contact.surName}
           </h1>
         </div>
         <div className="flex gap-4">
-          <button className="bg-white px-3 py-2 rounded-4xl shadow-[0px_0px_1px_rgba(0,0,0)]">
+          <button
+            className="bg-white px-3 py-2 rounded-4xl shadow-[0px_0px_1px_rgba(0,0,0)] cursor-pointer hover:text-[#f1ddd0] hover:bg-[#684127]"
+            onClick={() => dispatch(handleOpenModal())}
+          >
             Изменить
           </button>
-          <button className="border border-red-700  px-3 rounded-4xl text-red-700">
+          <button className="border border-red-700  px-3 py-2 rounded-4xl text-red-700 cursor-pointer hover:bg-red-700 hover:text-white">
             Удалить
           </button>
         </div>
@@ -55,6 +64,7 @@ export default function ContactInfo(contact: ContactProps) {
         </span>
         <p>{contact.notes}</p>
       </div>
+      {isOpen && <ChangeInfoUser {...contact}></ChangeInfoUser>}
     </div>
   );
 }

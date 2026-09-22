@@ -1,15 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
+import type { ContactProps } from "../type/typeUser";
+
+const initialState: ContactProps | null = null;
 
 export const userSlice = createSlice({
   name: "currentUser",
-  initialState: {
-    id: 0,
-    name: "string",
-    surname: "string",
-    phone: "string",
-    email: "string",
-    notes: "string",
-  },
+  initialState,
   reducers: {
     chooseUser: (state, action) => {
       return action.payload;
