@@ -1,8 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import type { ContactProps } from "../type/typeUser";
-import ChangeInfoUser from "./ChangeInfoUser";
-import { handleOpenModal } from "../features/modalSlice";
+import { openModal } from "../features/modalSlice";
 import { useEffect } from "react";
+import type { AppDispatch } from "../store";
+import { fetchDeleteUser } from "../features/contactsSlice";
 
 export default function ContactInfo({ contact }: { contact: ContactProps }) {
   const firstLetterName = contact.firstName
@@ -13,7 +14,7 @@ export default function ContactInfo({ contact }: { contact: ContactProps }) {
     : "";
 
   const isOpen = useSelector((state) => state.modalWindow.isOpen);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {});
 
@@ -34,11 +35,16 @@ export default function ContactInfo({ contact }: { contact: ContactProps }) {
         <div className="flex gap-4">
           <button
             className="bg-white px-3 py-2 rounded-4xl shadow-[0px_0px_1px_rgba(0,0,0)] cursor-pointer hover:text-[#f1ddd0] hover:bg-[#684127]"
-            onClick={() => dispatch(handleOpenModal())}
+            onClick={() => dispatch(openModal(contact))}
           >
             Изменить
           </button>
-          <button className="border border-red-700  px-3 py-2 rounded-4xl text-red-700 cursor-pointer hover:bg-red-700 hover:text-white">
+          <button
+            className="border border-red-700  px-3 py-2 rounded-4xl text-red-700 cursor-pointer hover:bg-red-700 hover:text-white"
+            onClick={() => {
+              dispatch(fetchDeleteUser(contact));
+            }}
+          >
             Удалить
           </button>
         </div>
@@ -67,7 +73,6 @@ export default function ContactInfo({ contact }: { contact: ContactProps }) {
         </span>
         <p>{contact.notes}</p>
       </div>
-      {isOpen && <ChangeInfoUser {...contact}></ChangeInfoUser>}
     </div>
   );
 }

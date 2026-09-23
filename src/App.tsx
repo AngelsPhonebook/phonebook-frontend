@@ -6,11 +6,24 @@ import { useEffect } from "react";
 import { fetchGetContacts } from "./features/contactsSlice";
 import type { AppDispatch } from "./store";
 import type { ContactProps } from "./type/typeUser";
+import ContactForm from "./components/ContactForm";
+import { openModal } from "./features/modalSlice";
+
+import { createUser } from "./features/userSlice";
 
 function App() {
   const contacts = useSelector((state) => state.contacts.contacts);
   const dispatch = useDispatch<AppDispatch>();
   const currentUser = useSelector((state) => state.currentUser);
+  const isOpen = useSelector((state) => state.modalWindow.isOpen);
+  const newUser: ContactProps = {
+    id: "",
+    firstName: "",
+    surName: "",
+    phone: "",
+    email: "",
+    notes: "",
+  };
 
   useEffect(() => {
     dispatch(fetchGetContacts());
@@ -42,7 +55,12 @@ function App() {
               </p>
             </div>
 
-            <button className="bg-[#d4541e] font-semibold bold px-5 py-3 rounded-4xl cursor-pointer text-white">
+            <button
+              className="bg-[#d4541e] font-semibold bold px-5 py-3 rounded-4xl cursor-pointer text-white"
+              onClick={() => {
+                dispatch(openModal(newUser));
+              }}
+            >
               + Добавить контакт
             </button>
           </div>
@@ -50,6 +68,8 @@ function App() {
           <ContactInfo contact={currentUser} />
         )}
       </div>
+
+      {isOpen && <ContactForm contact={currentUser}></ContactForm>}
     </div>
   );
 }

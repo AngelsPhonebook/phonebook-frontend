@@ -1,5 +1,13 @@
 export type ContactProps = {
-  id: number;
+  id: string;
+  firstName: string;
+  surName: string;
+  phone: string;
+  email: string;
+  notes: string;
+};
+
+export type NewContact = {
   firstName: string;
   surName: string;
   phone: string;

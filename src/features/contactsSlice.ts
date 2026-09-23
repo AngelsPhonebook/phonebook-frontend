@@ -44,6 +44,22 @@ export const fetchUpdateContact = createAsyncThunk(
   },
 );
 
+export const fetchDeleteUser = createAsyncThunk(
+  "contacts/deleteUser",
+  async (user: ContactProps) => {
+    const res = await fetch(`${API}/contacts/${user.id}`, {
+      method: "DELETE",
+      headers: {
+        accept: "application/json",
+      },
+    });
+    if (!res.ok) {
+      throw new Error(`Ошибка в удалении пользователя ${res.status}`);
+    }
+    return user.id;
+  },
+);
+
 const initialState: ContactState = {
   contacts: [],
   loading: false,
@@ -80,9 +96,26 @@ export const contactSlice = createSlice({
       })
       .addCase(fetchUpdateContact.rejected, (state, action) => {
         state.loading = false;
-        state.error = `Ошибка в получении данных ${action.error.message}`;
+        state.error = `Ошибка в обновлении данных ${action.error.message}`;
       })
       .addCase(fetchUpdateContact.pending, (state) => {
+        state.error = null;
+        state.loading = true;
+      })
+
+      .addCase(fetchDeleteUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        const deletedUserIndex = state.contacts.findIndex(
+          (contact) => contact.id === action.payload,
+        );
+        state.contacts.splice(deletedUserIndex, 1);
+      })
+      .addCase(fetchDeleteUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = `Ошибка в удалении данных ${action.error.message}`;
+      })
+      .addCase(fetchDeleteUser.pending, (state) => {
         state.error = null;
         state.loading = true;
       });
