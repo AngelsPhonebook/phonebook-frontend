@@ -9,8 +9,8 @@ export default function ContactInfo({ contact }: { contact: ContactProps }) {
   const firstLetterName = contact.firstName
     ? contact.firstName.charAt(0).toUpperCase()
     : "";
-  const firstLetterSurname = contact.surName
-    ? contact.surName.charAt(0).toUpperCase()
+  const firstLetterSurname = contact.lastName
+    ? contact.lastName.charAt(0).toUpperCase()
     : "";
 
   const isOpen = useSelector((state) => state.modalWindow.isOpen);
@@ -29,7 +29,7 @@ export default function ContactInfo({ contact }: { contact: ContactProps }) {
             </h1>
           </div>
           <h1>
-            {contact.firstName} {contact.surName}
+            {contact.firstName} {contact.lastName}
           </h1>
         </div>
         <div className="flex gap-4">

@@ -9,8 +9,8 @@ export default function ContactItem({ contact, onClick }: Contact) {
   const firstLetterName = contact.firstName
     ? contact.firstName.charAt(0).toUpperCase()
     : "";
-  const firstLetterSurname = contact.surName
-    ? contact.surName.charAt(0).toUpperCase()
+  const firstLetterSurname = contact.lastName
+    ? contact.lastName.charAt(0).toUpperCase()
     : "";
 
   return (
@@ -26,7 +26,7 @@ export default function ContactItem({ contact, onClick }: Contact) {
       </div>
       <div>
         <h2>
-          {contact.firstName} {contact.surName}
+          {contact.firstName} {contact.lastName}
         </h2>
         <span className="text-gray-500 text-xs">{contact.phone}</span>
       </div>

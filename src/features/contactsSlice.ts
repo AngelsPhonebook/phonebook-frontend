@@ -59,6 +59,23 @@ export const fetchDeleteUser = createAsyncThunk(
     return user.id;
   },
 );
+export const fetchAddUser = createAsyncThunk(
+  "contacts/updateUser",
+  async (user: ContactProps) => {
+    const res = await fetch(`${API}/contacts`, {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+      },
+      body: JSON.stringify(user),
+    });
+    if (!res.ok) {
+      throw new Error(`Ошибка в добавлении пользователя ${res.status}`);
+    }
+    const data = await res.json();
+    return data;
+  },
+);
 
 const initialState: ContactState = {
   contacts: [],
@@ -116,6 +133,20 @@ export const contactSlice = createSlice({
         state.error = `Ошибка в удалении данных ${action.error.message}`;
       })
       .addCase(fetchDeleteUser.pending, (state) => {
+        state.error = null;
+        state.loading = true;
+      })
+
+      .addCase(fetchAddUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.contacts.push(action.payload);
+      })
+      .addCase(fetchAddUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = `Ошибка в добавлении пользователя ${action.error.message}`;
+      })
+      .addCase(fetchAddUser.pending, (state) => {
         state.error = null;
         state.loading = true;
       });

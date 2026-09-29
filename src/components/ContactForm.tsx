@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import type { ContactProps } from "../type/typeUser";
 import Input from "./Input";
-import { closeModal, openModal } from "../features/modalSlice";
+import { closeModal } from "../features/modalSlice";
 import { createPortal } from "react-dom";
 import { useState } from "react";
-import { fetchUpdateContact } from "../features/contactsSlice";
+import { fetchAddUser, fetchUpdateContact } from "../features/contactsSlice";
 import type { AppDispatch } from "../store";
 import { chooseUser } from "../features/userSlice";
 
@@ -34,10 +34,10 @@ export default function ContactForm() {
             }
           ></Input>
           <Input
-            nameInfo="surName"
-            info={updateUser.surName}
+            nameInfo="lastName"
+            info={updateUser.lastName}
             onChange={(e) =>
-              setUpdateUser({ ...updateUser, surName: e.target.value })
+              setUpdateUser({ ...updateUser, lastName: e.target.value })
             }
           ></Input>
           <Input
@@ -65,9 +65,15 @@ export default function ContactForm() {
           <button
             className="border border-red-700 bg-red-700 px-3 py-2 rounded-4xl text-white cursor-pointer hover:shadow-[0_0_7px_rgba(0,0,0,0.3)]"
             onClick={() => {
-              dispatch(fetchUpdateContact(updateUser));
-              dispatch(closeModal());
-              dispatch(chooseUser(updateUser));
+              if (updateUser.id) {
+                dispatch(fetchUpdateContact(updateUser));
+                dispatch(closeModal());
+                dispatch(chooseUser(updateUser));
+              } else {
+                console.log(updateUser);
+                dispatch(fetchAddUser(updateUser));
+                dispatch(closeModal());
+              }
             }}
           >
             Сохранить изменения

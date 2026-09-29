@@ -14,7 +14,7 @@ export const userSlice = createSlice({
       return {
         id: "",
         firstName: "",
-        surName: "",
+        lastName: "",
         phone: "",
         email: "",
         notes: "",

@@ -1,7 +1,7 @@
 export type ContactProps = {
   id: string;
   firstName: string;
-  surName: string;
+  lastName: string;
   phone: string;
   email: string;
   notes: string;
@@ -9,7 +9,7 @@ export type ContactProps = {
 
 export type NewContact = {
   firstName: string;
-  surName: string;
+  lastName: string;
   phone: string;
   email: string;
   notes: string;
