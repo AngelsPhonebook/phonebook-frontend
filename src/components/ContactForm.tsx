@@ -5,13 +5,27 @@ import { closeModal } from "../features/modalSlice";
 import { createPortal } from "react-dom";
 import { useState } from "react";
 import { fetchAddUser, fetchUpdateContact } from "../features/contactsSlice";
-import type { AppDispatch } from "../store";
+import type { AppDispatch, RootState } from "../store";
 import { chooseUser } from "../features/userSlice";
 
 export default function ContactForm() {
   const dispatch = useDispatch<AppDispatch>();
-  const contact = useSelector((state) => state.modalWindow.user);
-  const [updateUser, setUpdateUser] = useState<ContactProps>(contact);
+  const contact = useSelector((state: RootState) => state.modalWindow.user);
+  const [updateUser, setUpdateUser] = useState<ContactProps>(
+    () =>
+      contact ?? {
+        id: "",
+        firstName: "",
+        lastName: "",
+        phone: "",
+        email: "",
+        notes: "",
+      },
+  );
+  const [errorText, setErrorText] = useState({ firstName: "", phone: "" });
+
+  const nameRegex = /^[А-Яа-яA-Za-zЁё-]/;
+  const numberRegex = /^\+?[0-9\s()-]+$/;
 
   return createPortal(
     <div
@@ -24,15 +38,23 @@ export default function ContactForm() {
           e.stopPropagation();
         }}
       >
-        <h1>Изменить информацию</h1>
-        <div className="flex flex-col gap-y-5">
-          <Input
-            nameInfo="firstName"
-            info={updateUser.firstName}
-            onChange={(e) =>
-              setUpdateUser({ ...updateUser, firstName: e.target.value })
-            }
-          ></Input>
+        <div className="flex flex-col gap-y-4">
+          <h1>Изменить информацию</h1>
+          <div>
+            <Input
+              nameInfo="firstName"
+              info={updateUser.firstName}
+              onChange={(e) =>
+                setUpdateUser({ ...updateUser, firstName: e.target.value })
+              }
+            ></Input>
+            {errorText.firstName && (
+              <span className="text-red-700 text-xs">
+                {errorText.firstName}
+              </span>
+            )}
+          </div>
+
           <Input
             nameInfo="lastName"
             info={updateUser.lastName}
@@ -40,13 +62,19 @@ export default function ContactForm() {
               setUpdateUser({ ...updateUser, lastName: e.target.value })
             }
           ></Input>
-          <Input
-            nameInfo="number"
-            info={updateUser.phone}
-            onChange={(e) =>
-              setUpdateUser({ ...updateUser, phone: e.target.value })
-            }
-          ></Input>
+          <div>
+            <Input
+              nameInfo="number"
+              info={updateUser.phone}
+              onChange={(e) =>
+                setUpdateUser({ ...updateUser, phone: e.target.value })
+              }
+            ></Input>
+            {errorText.phone && (
+              <span className="text-red-700 text-xs">{errorText.phone}</span>
+            )}
+          </div>
+
           <Input
             nameInfo="email"
             info={updateUser.email}
@@ -65,14 +93,32 @@ export default function ContactForm() {
           <button
             className="border border-red-700 bg-red-700 px-3 py-2 rounded-4xl text-white cursor-pointer hover:shadow-[0_0_7px_rgba(0,0,0,0.3)]"
             onClick={() => {
-              if (updateUser.id) {
-                dispatch(fetchUpdateContact(updateUser));
-                dispatch(closeModal());
-                dispatch(chooseUser(updateUser));
-              } else {
-                console.log(updateUser);
-                dispatch(fetchAddUser(updateUser));
-                dispatch(closeModal());
+              if (
+                nameRegex.test(updateUser.firstName) &&
+                numberRegex.test(updateUser.phone)
+              ) {
+                setErrorText((prev) => ({ ...prev, phone: "", firstName: "" }));
+                if (updateUser.id) {
+                  dispatch(fetchUpdateContact(updateUser));
+                  dispatch(closeModal());
+                  dispatch(chooseUser(updateUser));
+                } else {
+                  console.log(updateUser);
+                  dispatch(fetchAddUser(updateUser));
+                  dispatch(closeModal());
+                }
+              }
+              if (!nameRegex.test(updateUser.firstName)) {
+                setErrorText((prev) => ({
+                  ...prev,
+                  firstName: "Отсутствует имя контакта",
+                }));
+              }
+              if (!numberRegex.test(updateUser.phone)) {
+                setErrorText((prev) => ({
+                  ...prev,
+                  phone: "Введите корректный номер телефона",
+                }));
               }
             }}
           >

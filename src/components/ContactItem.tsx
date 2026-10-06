@@ -3,9 +3,10 @@ import type { ContactProps } from "../type/typeUser";
 type Contact = {
   contact: ContactProps;
   onClick: () => void;
+  isActive: boolean;
 };
 
-export default function ContactItem({ contact, onClick }: Contact) {
+export default function ContactItem({ contact, onClick, isActive }: Contact) {
   const firstLetterName = contact.firstName
     ? contact.firstName.charAt(0).toUpperCase()
     : "";
@@ -16,7 +17,7 @@ export default function ContactItem({ contact, onClick }: Contact) {
   return (
     <div
       onClick={onClick}
-      className="flex hover:bg-[#f9eae3] hover:cursor-pointer items-center gap-x-2.5 py-3 px-5"
+      className={`flex hover:bg-[#f9eae3] hover:cursor-pointer items-center gap-x-2.5 py-3 px-5 ${isActive ? "bg-[#efe9e0] " : ""}`}
     >
       <div className="relative bg-[#f1ddd0]  w-10 h-10 text-[#d4541e] rounded-full">
         <p className="absolute top-[50%] left-[50%] translate-[-50%]">

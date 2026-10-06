@@ -44,6 +44,25 @@ export const fetchUpdateContact = createAsyncThunk(
   },
 );
 
+export const fetchUpdateNotes = createAsyncThunk(
+  "contacts/updateNotes",
+  async ({ id, notes }: { id: string; notes: string }) => {
+    const res = await fetch(`${API}/contacts/${id}`, {
+      method: "PATCH",
+      headers: {
+        accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ notes }),
+    });
+    if (!res.ok) {
+      throw new Error(`Ошибка в обновлении заметок ${res.ok}`);
+    }
+    const data = await res.json();
+    return data;
+  },
+);
+
 export const fetchDeleteUser = createAsyncThunk(
   "contacts/deleteUser",
   async (user: ContactProps) => {
@@ -66,8 +85,12 @@ export const fetchAddUser = createAsyncThunk(
       method: "POST",
       headers: {
         accept: "application/json",
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(user),
+      body: JSON.stringify({
+        ...user,
+        id: undefined,
+      }),
     });
     if (!res.ok) {
       throw new Error(`Ошибка в добавлении пользователя ${res.status}`);
@@ -116,6 +139,23 @@ export const contactSlice = createSlice({
         state.error = `Ошибка в обновлении данных ${action.error.message}`;
       })
       .addCase(fetchUpdateContact.pending, (state) => {
+        state.error = null;
+        state.loading = true;
+      })
+
+      .addCase(fetchUpdateNotes.fulfilled, (state, action) => {
+        const changedContactIndex = state.contacts.findIndex(
+          (contact) => contact.id === action.payload.id,
+        );
+        state.contacts.splice(changedContactIndex, 1, action.payload);
+        state.error = null;
+        state.loading = false;
+      })
+      .addCase(fetchUpdateNotes.rejected, (state, action) => {
+        state.loading = false;
+        state.error = `Ошибка в обновлении заметок ${action.error.message}`;
+      })
+      .addCase(fetchUpdateNotes.pending, (state) => {
         state.error = null;
         state.loading = true;
       })

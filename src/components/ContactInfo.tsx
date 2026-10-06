@@ -1,9 +1,10 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import type { ContactProps } from "../type/typeUser";
 import { openModal } from "../features/modalSlice";
-import { useEffect } from "react";
+import { useState } from "react";
 import type { AppDispatch } from "../store";
-import { fetchDeleteUser } from "../features/contactsSlice";
+import { fetchDeleteUser, fetchUpdateNotes } from "../features/contactsSlice";
+import { chooseUser } from "../features/userSlice";
 
 export default function ContactInfo({ contact }: { contact: ContactProps }) {
   const firstLetterName = contact.firstName
@@ -13,10 +14,13 @@ export default function ContactInfo({ contact }: { contact: ContactProps }) {
     ? contact.lastName.charAt(0).toUpperCase()
     : "";
 
-  const isOpen = useSelector((state) => state.modalWindow.isOpen);
   const dispatch = useDispatch<AppDispatch>();
+  const [isChangedNotes, setIsChangeNotes] = useState(false);
+  const [newNotes, setNewNotes] = useState(contact.notes);
 
-  useEffect(() => {});
+  function toggleChangeNotes() {
+    setIsChangeNotes((prev) => !prev);
+  }
 
   return (
     <div className=" w-full h-full max-h-180 px-15 grid grid-cols-1 gap-2.5 justify-around">
@@ -43,6 +47,7 @@ export default function ContactInfo({ contact }: { contact: ContactProps }) {
             className="border border-red-700  px-3 py-2 rounded-4xl text-red-700 cursor-pointer hover:bg-red-700 hover:text-white"
             onClick={() => {
               dispatch(fetchDeleteUser(contact));
+              dispatch(chooseUser(null));
             }}
           >
             Удалить
@@ -68,10 +73,54 @@ export default function ContactInfo({ contact }: { contact: ContactProps }) {
         </div>
       </div>
       <div className="flex flex-col gap-y-6 pt-5">
-        <span className="uppercase text-[#8a7f72] text-[14px] tracking-widest">
-          Notes
-        </span>
-        <p>{contact.notes}</p>
+        <div className="flex justify-between ">
+          <span className="uppercase text-[#8a7f72] text-[14px] tracking-widest">
+            Notes
+          </span>
+          {isChangedNotes ? (
+            <div className="flex gap-5">
+              <button
+                className="text-[#8a7f72] text-[14px] font-semibold cursor-pointer"
+                onClick={() => {
+                  toggleChangeNotes();
+                  setNewNotes(contact.notes);
+                }}
+              >
+                Отмена
+              </button>
+              <button
+                className="text-[#d4541e] text-[14px] font-semibold cursor-pointer"
+                onClick={async () => {
+                  const updatedContact = await dispatch(
+                    fetchUpdateNotes({ id: contact.id, notes: newNotes }),
+                  ).unwrap();
+                  dispatch(chooseUser(updatedContact));
+                  toggleChangeNotes();
+                }}
+              >
+                Сохранить
+              </button>
+            </div>
+          ) : (
+            <button
+              className="text-[#d4541e] text-[14px] font-semibold cursor-pointer"
+              onClick={() => toggleChangeNotes()}
+            >
+              Редактировать
+            </button>
+          )}
+        </div>
+
+        {isChangedNotes ? (
+          <textarea
+            rows={5}
+            className="bg-[#fceadf] resize-none border-[#d4541e] border rounded-xl px-3 py-2 scrollbar-thin overflow-auto scrollbar-thumb-gray-800 focus:outline-0"
+            onChange={(e) => setNewNotes(e.target.value)}
+            value={newNotes}
+          />
+        ) : (
+          <p>{contact.notes}</p>
+        )}
       </div>
     </div>
   );
