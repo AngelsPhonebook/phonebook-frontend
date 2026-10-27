@@ -4,17 +4,17 @@ import ContactItem from "./components/ContactItem";
 import { chooseUser } from "./features/userSlice";
 import { useEffect, useState } from "react";
 import { fetchGetContacts } from "./features/contactsSlice";
-import type { AppDispatch } from "./store";
+import type { AppDispatch, RootState } from "./store";
 import type { ContactProps } from "./type/typeUser";
 import ContactForm from "./components/ContactForm";
 import { openModal } from "./features/modalSlice";
 import SearchForm from "./components/SearchForm";
 
 function App() {
-  const contacts = useSelector((state) => state.contacts.contacts);
+  const contacts = useSelector((state: RootState) => state.contacts.contacts);
   const dispatch = useDispatch<AppDispatch>();
-  const currentUser = useSelector((state) => state.currentUser);
-  const isOpen = useSelector((state) => state.modalWindow.isOpen);
+  const currentUser = useSelector((state: RootState) => state.currentUser);
+  const isOpen = useSelector((state: RootState) => state.modalWindow.isOpen);
   const newUser: ContactProps = {
     id: "",
     firstName: "",
@@ -36,7 +36,7 @@ function App() {
 
   useEffect(() => {
     dispatch(fetchGetContacts());
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="h-screen w-full grid sm:grid-cols-[400px_1fr]">

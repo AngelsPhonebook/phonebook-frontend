@@ -32,7 +32,7 @@ export default function ContactInfo({ contact }: { contact: ContactProps }) {
               {firstLetterSurname}
             </h1>
           </div>
-          <h1>
+          <h1 className="text-center">
             {contact.firstName} {contact.lastName}
           </h1>
         </div>
@@ -65,17 +65,17 @@ export default function ContactInfo({ contact }: { contact: ContactProps }) {
 
       <div className="flex flex-col gap-y-6 justify-center">
         <span className="uppercase text-[#8a7f72] text-[14px] tracking-widest">
-          Contact Details
+          информация о контакте
         </span>
         <div className="grid grid-cols sm:grid-cols-2 gap-y-8">
           <div className="flex flex-col gap-2">
-            <h3 className="uppercase">Phone</h3>
+            <h3 className="uppercase">телефон</h3>
             <a href={`tel:${contact.phone}`} className="text-red-600">
               {contact.phone}
             </a>
           </div>
           <div className="flex flex-col gap-2">
-            <h3 className="uppercase">Email</h3>
+            <h3 className="uppercase">Эл. почта</h3>
             <span>{contact.email}</span>
           </div>
         </div>
@@ -83,7 +83,7 @@ export default function ContactInfo({ contact }: { contact: ContactProps }) {
       <div className="flex flex-col gap-y-6 pt-5">
         <div className="flex justify-between ">
           <span className="uppercase text-[#8a7f72] text-[14px] tracking-widest">
-            Notes
+            Заметки
           </span>
           {isChangedNotes ? (
             <div className="flex gap-5">
