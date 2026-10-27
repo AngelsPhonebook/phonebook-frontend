@@ -10,18 +10,11 @@ export const userSlice = createSlice({
     chooseUser: (_, action) => {
       return action.payload;
     },
-    createUser: () => {
-      return {
-        id: "",
-        firstName: "",
-        lastName: "",
-        phone: "",
-        email: "",
-        notes: "",
-      };
+    closeInfoUser: () => {
+      return null;
     },
   },
 });
 
-export const { chooseUser, createUser } = userSlice.actions;
+export const { chooseUser, closeInfoUser } = userSlice.actions;
 export default userSlice.reducer;

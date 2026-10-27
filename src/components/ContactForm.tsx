@@ -33,7 +33,7 @@ export default function ContactForm() {
       onClick={() => dispatch(closeModal())}
     >
       <div
-        className="bg-white w-120 py-9 px-8 flex flex-col gap-7 rounded-2xl"
+        className="bg-white w-120 max-sm:w-75 py-9 px-8 flex flex-col gap-7 rounded-2xl"
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -85,13 +85,13 @@ export default function ContactForm() {
         </div>
         <div className="flex gap-4 justify-end">
           <button
-            className=" bg-[#efe9e0]  cursor-pointer px-3 py-2 rounded-4xl text-black hover:shadow-[0_0_7px_rgba(0,0,0,0.3)]"
+            className=" bg-[#efe9e0]  cursor-pointer px-3 py-2 rounded-4xl text-black  max-sm:text-[14px] max-sm:rounded-3xl  hover:shadow-[0_0_7px_rgba(0,0,0,0.3)]"
             onClick={() => dispatch(closeModal())}
           >
             Отмена
           </button>
           <button
-            className="border border-red-700 bg-red-700 px-3 py-2 rounded-4xl text-white cursor-pointer hover:shadow-[0_0_7px_rgba(0,0,0,0.3)]"
+            className="border border-red-700 bg-red-700 px-3 py-2  max-sm:text-[14px] max-sm:rounded-3xl rounded-4xl text-white cursor-pointer hover:shadow-[0_0_7px_rgba(0,0,0,0.3)]"
             onClick={() => {
               if (
                 nameRegex.test(updateUser.firstName) &&
@@ -103,7 +103,6 @@ export default function ContactForm() {
                   dispatch(closeModal());
                   dispatch(chooseUser(updateUser));
                 } else {
-                  console.log(updateUser);
                   dispatch(fetchAddUser(updateUser));
                   dispatch(closeModal());
                 }
@@ -122,7 +121,7 @@ export default function ContactForm() {
               }
             }}
           >
-            Сохранить изменения
+            Сохранить
           </button>
         </div>
       </div>

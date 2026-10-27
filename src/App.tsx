@@ -39,8 +39,8 @@ function App() {
   }, []);
 
   return (
-    <div className="h-screen w-full grid grid-cols-[400px_1fr]">
-      <div className="bg-[#fdfaf7] overflow-auto max-h-screen">
+    <div className="h-screen w-full grid sm:grid-cols-[400px_1fr]">
+      <div className="bg-[#fdfaf7] overflow-auto max-h-screen py-8">
         <div className="mx-5 mt-2 flex justify-between items-center">
           <h1>Phonebook</h1>
           <button
@@ -77,9 +77,9 @@ function App() {
           />
         ))}
       </div>
-      <div className="bg-[#f7f3ee] flex">
+      <div className="bg-[#f7f3ee] flex ">
         {currentUser === null ? (
-          <div className="w-full flex flex-col justify-center items-center gap-10">
+          <div className="w-full flex flex-col justify-center items-center gap-10 max-sm:hidden">
             <div className="flex flex-col justify-center items-center gap-2">
               <p className="font-['Cormorant_Garamond',serif] text-6xl">
                 Выберите контакт
